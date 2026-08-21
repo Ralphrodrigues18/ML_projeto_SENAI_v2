@@ -16,6 +16,13 @@ INTERIM_DATA_DIR = DATA_DIR / "interim"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
 EXTERNAL_DATA_DIR = DATA_DIR / "external"
 
+ORDERS_PATH = RAW_DATA_DIR / "olist_orders_dataset.csv"
+ITEMS_PATH = RAW_DATA_DIR / "olist_order_items_dataset.csv"
+CUSTOMERS_PATH = RAW_DATA_DIR / "olist_customers_dataset.csv"
+
+OUTPUT_PATH = INTERIM_DATA_DIR / "dataset_features.csv"
+
+
 MODELS_DIR = PROJ_ROOT / "models"
 
 REPORTS_DIR = PROJ_ROOT / "reports"

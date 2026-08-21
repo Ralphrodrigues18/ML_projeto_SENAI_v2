@@ -22,7 +22,7 @@ def load_data(orders_path: Path, items_path: Path, customers_path: Path) -> tupl
     orders = pd.read_csv(
         orders_path, 
         parse_dates=[
-            "order_purshase_timestamp",
+            "order_purchase_timestamp",
             "order_approved_at",  
             "order_delivered_customer_date", 
             "order_estimated_delivery_date"]
@@ -143,7 +143,7 @@ def aggregate_items(items: pd.DataFrame) -> pd.DataFrame:
     return items_agg
 
 
-def create_dataset(orders, itens, costumers):
+def create_dataset(orders, itens, customers):
 
     orders = create_target(orders)
     itens_agg = aggregate_items(itens)
@@ -156,7 +156,7 @@ def create_dataset(orders, itens, costumers):
         )
 
     data = data.merge(
-        costumers[{"costumer_id", "customer_city", "customer_state"}],
+        customers[["customer_id", "customer_city", "customer_state"]],
         on="customer_id",
         how="left",
         validate="many_to_one"  # Garante que cada pedido corresponda a um único cliente.
