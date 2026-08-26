@@ -1,30 +1,19 @@
-from pathlib import Path
+import pandas as pd
 
-from loguru import logger
-from tqdm import tqdm
-import typer
+from module_olist.modeling.pipeline import create_gradient_boosting_pipeline, create_xgboost_pipeline, create_lightgbm_pipeline
 
-from module_olist.config import MODELS_DIR, PROCESSED_DATA_DIR
+def train_models(X_train: pd.DataFrame, y_train: pd.Series):
 
-app = typer.Typer()
+    models = {
+        "Gradient Boosting": create_gradient_boosting_pipeline(),
+        "XGBoost": create_xgboost_pipeline(),
+        "LightGBM": create_lightgbm_pipeline()
+    }
 
+    trained_models = {}
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
-    # -----------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Training some model...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Modeling training complete.")
-    # -----------------------------------------
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        trained_models[name] = model
 
-
-if __name__ == "__main__":
-    app()
+    return trained_models
