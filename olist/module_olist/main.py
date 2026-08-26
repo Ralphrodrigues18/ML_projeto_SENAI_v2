@@ -3,7 +3,7 @@ from module_olist.dataset import load_data, create_dataset, save_dataset
 from module_olist.features import create_features
 from module_olist.modeling.train import train_models
 from module_olist.modeling.evaluate import evaluate_models
-from module_olist.split import split_data
+from module_olist.modeling.split import split_data
 from loguru import logger
 
 
