@@ -40,7 +40,5 @@ def main():
     evaluate_models(models, X_test, y_test)
 
 
-
-
 if __name__ == "__main__":
     main()

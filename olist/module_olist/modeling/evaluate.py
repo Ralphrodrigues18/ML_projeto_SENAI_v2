@@ -1,7 +1,7 @@
 import numpy as np
 from loguru import logger
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
-
+from sklearn.metrics import confusion_matrix
 
 def evaluate_models(models, X_test, y_test):
 
@@ -12,7 +12,7 @@ def evaluate_models(models, X_test, y_test):
         best_f1 = -1
         best_precision = None
         best_recall = None
-
+        best_y_pred = None
         for threshold in np.arange(0.05, 0.5, 0.01):
             y_pred = (y_proba >= threshold).astype(int)
             precision = precision_score(y_test, y_pred)
@@ -24,6 +24,7 @@ def evaluate_models(models, X_test, y_test):
                 best_threshold = threshold
                 best_precision = precision
                 best_recall = recall
+                best_y_pred = y_pred
         roc_auc = roc_auc_score(y_test, y_proba)
 
 
@@ -33,3 +34,4 @@ def evaluate_models(models, X_test, y_test):
         logger.info(f"Recall: {best_recall:.3f}")
         logger.info(f"F1 Score: {best_f1:.3f}")
         logger.info(f"ROC-AUC: {roc_auc:.3f}")
+        logger.info(f"Matriz de Confusão:\n{confusion_matrix(y_test, best_y_pred)}")
