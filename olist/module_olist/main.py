@@ -4,6 +4,7 @@ from module_olist.features import create_features
 from module_olist.modeling.train import train_models
 from module_olist.modeling.evaluate import evaluate_models
 from module_olist.modeling.split import split_data
+from module_olist.modeling.cross_validation import cross_validate_models
 from loguru import logger
 
 
@@ -34,6 +35,8 @@ def main():
     save_dataset(data_features, INTERIM_DATA_DIR / "orders_dataset_refined.csv")
 
     X_train, X_test, y_train, y_test = split_data(data_features)
+
+    cross_validate_models(X_train, y_train)
 
     models = train_models(X_train, y_train)
 

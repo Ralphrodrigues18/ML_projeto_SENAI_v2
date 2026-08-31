@@ -7,6 +7,19 @@ from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
 
 
+"""
+Este módulo contém funções para criar pipelines de modelagem para diferentes algoritmos de aprendizado de máquina.
+
+NUMERICAL_FEATURES: Lista de nomes das colunas numéricas que serão usadas como features no modelo.
+CATEGORICAL_FEATURES: Lista de nomes das colunas categóricas que serão usadas como features no modelo.
+
+create_preprocessor: Cria um pré-processador que aplica OneHotEncoding nas colunas categóricas e mantém as colunas numéricas inalteradas.
+
+create_gradient_boosting_pipeline: Cria um pipeline para o modelo Gradient Boosting Classifier 
+create_xgboost_pipeline: Cria um pipeline para o modelo XGBoost Classifier
+create_lightgbm_pipeline: Cria um pipeline para o modelo LightGBM Classifier
+
+"""
 NUMERICAL_FEATURES = [
     "promised_days",
     "item_count",

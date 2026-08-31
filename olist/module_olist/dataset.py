@@ -144,6 +144,17 @@ def aggregate_items(items: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_dataset(orders, itens, customers):
+    """
+    Cria um dataset unificado a partir das tabelas de pedidos, itens e clientes.
+    Args:
+        orders (pd.DataFrame): DataFrame contendo os dados de pedidos.
+        items (pd.DataFrame): DataFrame contendo os dados de itens dos pedidos.
+        customers (pd.DataFrame): DataFrame contendo os dados de clientes.
+        
+    Returns:
+        pd.DataFrame: DataFrame unificado contendo informações de pedidos, itens e clientes.
+        
+    """
 
     orders = create_target(orders)
     itens_agg = aggregate_items(itens)
