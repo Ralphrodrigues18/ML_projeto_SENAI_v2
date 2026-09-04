@@ -3,7 +3,6 @@ import numpy as np
 from loguru import logger
 
 
-
 from sklearn.model_selection import (
     StratifiedKFold, 
     cross_validate, 
@@ -23,7 +22,6 @@ from module_olist.modeling.pipeline import(
     create_lightgbm_pipeline
 ) 
 
-from module_olist.config import MODELS_DIR
 
 
 def summarize_cv(results):
@@ -191,7 +189,6 @@ def cross_validate_models(X_train: pd.DataFrame, y_train: pd.Series,):
     logger.info(f"F1 OOF: {best_f1:.3f}")  
     logger.info(f"PR-AUC médio CV: {best_pr_auc:.3f}")
         
-    logger.success("Cross Validation concluído.")
-
-
+    logger.success("Cross Validation concluído.")  
+      
     return (best_model_name, best_threshold)

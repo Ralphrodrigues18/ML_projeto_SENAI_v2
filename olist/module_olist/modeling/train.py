@@ -1,14 +1,66 @@
-import pandas as pd
-from module_olist.modeling.cross_validation import cross_validate_models
+# module_olist/modeling/train.py
+import json
+import joblib
+from loguru import logger
+from module_olist.modeling.pipeline import (
+    create_gradient_boosting_pipeline,
+    create_xgboost_pipeline,
+    create_lightgbm_pipeline,
+)
 
-from module_olist.modeling.pipeline import create_gradient_boosting_pipeline, create_xgboost_pipeline, create_lightgbm_pipeline
+def create_selected_model(model_name,):
+    """
+    Cria o pipeline correspondente
+    ao modelo selecionado.
+    """
+    pipelines = {
+        "Gradient Boosting": create_gradient_boosting_pipeline,
+        "XGBoost": create_xgboost_pipeline,
+        "LightGBM": create_lightgbm_pipeline,
+    }
+    
+    if model_name not in pipelines:
+        raise ValueError(f"Modelo desconhecido: {model_name}")
+    
+    return pipelines[model_name]()
 
+def train_model(
+    model_name,
+    threshold,
+    X_train,
+    y_train,
+    model_path,
+    metadata_path,
+    ):
+    """
+    Treina o modelo selecionado utilizando
+    todo o conjunto de treinamento
+    e salva modelo e metadados.
+    """
+    logger.info(f"Treinando modelo final: {model_name}")
+    
+    model = create_selected_model(model_name)
+    
+    model.fit(X_train, y_train,)
+    
+    model_path.parent.mkdir(parents=True, exist_ok=True)
 
-def train_models(X_train: pd.DataFrame, y_train: pd.Series):
-     
-    best_model_name = cross_validate_models(X_train, y_train)
+    joblib.dump(model, model_path)
 
-    best_model_name.fit(X_train, y_train)
-    trained_models = best_model_name
+    logger.success(f"Modelo salvo em: {model_path}")
 
-    return trained_models
+    
+    metadata = {
+        "model_name": model_name,
+        "threshold": float(threshold),
+        "selection_metric": "pr_auc",
+        "threshold_metric": "f1",
+    }
+
+    with open( metadata_path, "w", encoding="utf-8") as file:
+
+        json.dump(metadata,file,indent=4,)
+
+    logger.success(f"Metadados salvos em: {metadata_path}")
+
+    return model

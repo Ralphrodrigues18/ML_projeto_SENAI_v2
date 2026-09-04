@@ -1,7 +1,7 @@
-from module_olist.config import INTERIM_DATA_DIR, ORDERS_PATH, ITEMS_PATH, CUSTOMERS_PATH, CUSTOMERS_PATH
+from module_olist.config import INTERIM_DATA_DIR, MODELS_DIR, ORDERS_PATH, ITEMS_PATH, CUSTOMERS_PATH
 from module_olist.dataset import load_data, create_dataset, save_dataset
 from module_olist.features import create_features
-from module_olist.modeling.train import train_models
+from module_olist.modeling.train import train_model
 from module_olist.modeling.evaluate import evaluate_models
 from module_olist.modeling.split import split_data
 from module_olist.modeling.cross_validation import cross_validate_models
@@ -36,11 +36,21 @@ def main():
 
     X_train, X_test, y_train, y_test = split_data(data_features)
 
-    cross_validate_models(X_train, y_train)
+    (best_model_name, best_threshold) = cross_validate_models(X_train, y_train)
 
-    models = train_models(X_train, y_train)
+    logger.info(f"Modelo escolhido: {best_model_name}")
+    logger.info(f"Threshold escolhido: {best_threshold:.2f}")
+   
+    models = train_model(
+        model_name=best_model_name,
+        threshold=best_threshold,
+        X_train=X_train,
+        y_train=y_train,
+        model_path=(MODELS_DIR/ "best_model.joblib"),
+        metadata_path=(MODELS_DIR/ "metadata.json"),
+    )
 
-    evaluate_models(models, X_test, y_test)
+    evaluate_models(models, X_test, y_test, model_name=best_model_name)
 
 
 if __name__ == "__main__":
